@@ -425,7 +425,7 @@ export class AppManager implements BackstageApp {
       deps: {},
       factory: () => this.identityApi,
     });
-    registry.register('static', {
+    this.apiFactoryRegistry.register('static', {
       api: fetchApiRef,
       deps: {},
       factory: () => {
