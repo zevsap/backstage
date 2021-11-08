@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export { BackstageProtocolResolverFetchMiddleware } from './BackstageProtocolResolverFetchMiddleware';
 export { FetchApiBuilder } from './FetchApiBuilder';
 export { IdentityAwareFetchMiddleware } from './IdentityAwareFetchMiddleware';
 export type { FetchFunction, FetchMiddleware } from './types';

@@ -27,6 +27,8 @@ export type FetchApi = typeof fetch;
 /**
  * A wrapper for the fetch API, that has additional behaviors such as the
  * ability to automatically inject auth information where necessary.
+ *
+ * @public
  */
 export const fetchApiRef: ApiRef<FetchApi> = createApiRef({
   id: 'core.fetch',

@@ -25,8 +25,13 @@ const DEFAULT_HEADER_NAME = 'backstage-token';
  * @public
  */
 export class IdentityAwareFetchMiddleware implements FetchMiddleware {
-  private headerName = DEFAULT_HEADER_NAME;
+  private headerName: string;
   private tokenFunction: (() => Promise<string | undefined>) | undefined;
+
+  constructor() {
+    this.headerName = DEFAULT_HEADER_NAME;
+    this.tokenFunction = undefined;
+  }
 
   /**
    * {@inheritdoc FetchMiddleware.apply}

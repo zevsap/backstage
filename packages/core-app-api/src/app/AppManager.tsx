@@ -24,6 +24,7 @@ import {
   BackstagePlugin,
   ConfigApi,
   configApiRef,
+  discoveryApiRef,
   ExternalRouteRef,
   featureFlagsApiRef,
   fetchApiRef,
@@ -47,6 +48,7 @@ import {
   ApiProvider,
   ApiRegistry,
   AppThemeSelector,
+  BackstageProtocolResolverFetchMiddleware,
   ConfigReader,
   FetchApiBuilder,
   LocalStorageFeatureFlags,
@@ -427,9 +429,14 @@ export class AppManager implements BackstageApp {
     });
     this.apiFactoryRegistry.register('static', {
       api: fetchApiRef,
-      deps: {},
-      factory: () => {
+      deps: { discoveryApi: discoveryApiRef },
+      factory: ({ discoveryApi }) => {
         return FetchApiBuilder.create()
+          .with(
+            new BackstageProtocolResolverFetchMiddleware(pluginId =>
+              discoveryApi.getBaseUrl(pluginId),
+            ),
+          )
           .with(this.identityApi.asFetchMiddleware())
           .build();
       },
