@@ -15,6 +15,24 @@
  */
 
 import { Config } from '@backstage/config';
+import {
+  AnyApiFactory,
+  ApiHolder,
+  AppTheme,
+  AppThemeApi,
+  appThemeApiRef,
+  BackstagePlugin,
+  ConfigApi,
+  configApiRef,
+  ExternalRouteRef,
+  featureFlagsApiRef,
+  fetchApiRef,
+  IconComponent,
+  identityApiRef,
+  RouteRef,
+  SubRouteRef,
+  useApi,
+} from '@backstage/core-plugin-api';
 import React, {
   ComponentType,
   PropsWithChildren,
@@ -30,27 +48,9 @@ import {
   ApiRegistry,
   AppThemeSelector,
   ConfigReader,
-  IdentityAwareFetchApi,
+  FetchApiBuilder,
   LocalStorageFeatureFlags,
 } from '../apis';
-import {
-  useApi,
-  AnyApiFactory,
-  ApiHolder,
-  IconComponent,
-  AppTheme,
-  appThemeApiRef,
-  configApiRef,
-  AppThemeApi,
-  ConfigApi,
-  featureFlagsApiRef,
-  fetchApiRef,
-  identityApiRef,
-  BackstagePlugin,
-  RouteRef,
-  SubRouteRef,
-  ExternalRouteRef,
-} from '@backstage/core-plugin-api';
 import { ApiFactoryRegistry, ApiResolver } from '../apis/system';
 import {
   childDiscoverer,
@@ -64,8 +64,8 @@ import {
   routeParentCollector,
   routePathCollector,
 } from '../routing/collectors';
-import { RoutingProvider } from '../routing/RoutingProvider';
 import { RouteTracker } from '../routing/RouteTracker';
+import { RoutingProvider } from '../routing/RoutingProvider';
 import { validateRoutes } from '../routing/validation';
 import { AppContextProvider } from './AppContext';
 import { AppIdentity } from './AppIdentity';
@@ -429,10 +429,9 @@ export class AppManager implements BackstageApp {
       api: fetchApiRef,
       deps: {},
       factory: () => {
-        const result = new IdentityAwareFetchApi();
-        this.identityApi.onSignIn(result.onSignIn);
-        this.identityApi.onSignOut(result.onSignOut);
-        return result.fetch;
+        return FetchApiBuilder.create()
+          .with(this.identityApi.asFetchMiddleware())
+          .build();
       },
     });
 

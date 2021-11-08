@@ -15,9 +15,9 @@
  */
 
 import { IdentityApi, ProfileInfo } from '@backstage/core-plugin-api';
+import { FetchMiddleware, IdentityAwareFetchMiddleware } from '../apis';
 import { SignInResult } from './types';
 
-type UnregisterFunction = () => void;
 type SignInListener = (result: SignInResult) => void;
 type SignOutListener = () => void;
 
@@ -91,17 +91,12 @@ export class AppIdentity implements IdentityApi {
     this.signInListeners.forEach(listener => listener(result));
   }
 
-  onSignIn(listener: SignInListener): UnregisterFunction {
-    this.signInListeners.add(listener);
-    return () => {
-      this.signInListeners.delete(listener);
-    };
-  }
-
-  onSignOut(listener: SignOutListener): UnregisterFunction {
-    this.signOutListeners.add(listener);
-    return () => {
-      this.signOutListeners.delete(listener);
-    };
+  asFetchMiddleware(): FetchMiddleware {
+    const middleware = new IdentityAwareFetchMiddleware();
+    this.signInListeners.add(l =>
+      middleware.setSignedIn(async () => l.getIdToken?.()),
+    );
+    this.signOutListeners.add(() => middleware.setSignedOut());
+    return middleware;
   }
 }

@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-import fetch from 'cross-fetch';
-import { ApiRef, createApiRef } from '../system';
+import crossFetch from 'cross-fetch';
 
 /**
- * The type of a fetch API function.
+ * The type of a fetch call.
  *
  * @public
  */
-export type FetchApi = typeof fetch;
+export type FetchFunction = typeof crossFetch;
 
 /**
- * A wrapper for the fetch API, that has additional behaviors such as the
- * ability to automatically inject auth information where necessary.
+ * A middleware that modifies the behavior of an ongoing fetch.
+ *
+ * @public
  */
-export const fetchApiRef: ApiRef<FetchApi> = createApiRef({
-  id: 'core.fetch',
-});
+export interface FetchMiddleware {
+  /**
+   * Applies this middleware to an inner implementation.
+   *
+   * @param next - The next, inner, implementation, that this middleware shall
+   *               call out to as part of the request cycle.
+   */
+  apply(next: FetchFunction): FetchFunction;
+}

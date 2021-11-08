@@ -14,4 +14,6 @@
  * limitations under the License.
  */
 
-export { IdentityAwareFetchApi } from './IdentityAwareFetchApi';
+export { FetchApiBuilder } from './FetchApiBuilder';
+export { IdentityAwareFetchMiddleware } from './IdentityAwareFetchMiddleware';
+export type { FetchFunction, FetchMiddleware } from './types';
