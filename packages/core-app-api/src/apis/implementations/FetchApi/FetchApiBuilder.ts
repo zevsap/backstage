@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { FetchApi } from '@backstage/core-plugin-api';
 import crossFetch from 'cross-fetch';
 import { FetchFunction, FetchMiddleware } from './types';
 
@@ -40,13 +41,15 @@ export class FetchApiBuilder {
     ]);
   }
 
-  build(): FetchFunction {
+  build(): FetchApi {
     let result = this.implementation;
 
     for (const m of this.middleware) {
       result = m.apply(result);
     }
 
-    return result;
+    return {
+      fetch: result,
+    };
   }
 }

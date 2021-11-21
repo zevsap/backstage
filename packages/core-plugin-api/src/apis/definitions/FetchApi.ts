@@ -18,11 +18,14 @@ import fetch from 'cross-fetch';
 import { ApiRef, createApiRef } from '../system';
 
 /**
- * The type of a fetch API function.
+ * A wrapper for the fetch API, that has additional behaviors such as the
+ * ability to automatically inject auth information where necessary.
  *
  * @public
  */
-export type FetchApi = typeof fetch;
+export type FetchApi = {
+  fetch: typeof fetch;
+};
 
 /**
  * A wrapper for the fetch API, that has additional behaviors such as the

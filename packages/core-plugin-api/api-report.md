@@ -499,7 +499,9 @@ export enum FeatureFlagState {
 }
 
 // @public
-export type FetchApi = typeof fetch_2;
+export type FetchApi = {
+  fetch: typeof fetch_2;
+};
 
 // @public
 export const fetchApiRef: ApiRef<FetchApi>;
