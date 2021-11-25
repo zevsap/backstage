@@ -16,7 +16,10 @@
 import React, { useCallback, useEffect } from 'react';
 import { FieldProps } from '@rjsf/core';
 import { scaffolderApiRef } from '../../../api';
-import { scmIntegrationsApiRef } from '@backstage/integration-react';
+import {
+  scmIntegrationsApiRef,
+  scmAuthApiRef,
+} from '@backstage/integration-react';
 import { useAsync } from 'react-use';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -26,6 +29,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { useApi } from '@backstage/core-plugin-api';
 import { Progress } from '@backstage/core-components';
+import { useSecretsContext } from '../../secrets';
 
 function splitFormData(url: string | undefined) {
   let host = undefined;
@@ -95,7 +99,8 @@ export const RepoUrlPicker = ({
   const scaffolderApi = useApi(scaffolderApiRef);
   const integrationApi = useApi(scmIntegrationsApiRef);
   const allowedHosts = uiSchema['ui:options']?.allowedHosts as string[];
-
+  const { setSecret } = useSecretsContext();
+  const scmAuthApi = useApi(scmAuthApiRef);
   const { value: integrations, loading } = useAsync(async () => {
     return await scaffolderApi.getIntegrationsList({ allowedHosts });
   });
@@ -217,6 +222,19 @@ export const RepoUrlPicker = ({
     project,
   ]);
 
+  const onBlur = useCallback(() => {
+    const check = async () => {
+      if (host && owner && repo) {
+        const token = await scmAuthApi.getCredentials({
+          url: `https://${host}/${owner}/${repo}`,
+        });
+
+        setSecret({ scmToken: token.token });
+      }
+    };
+    check();
+  }, [host, owner, repo, scmAuthApi, setSecret]);
+
   if (loading) {
     return <Progress />;
   }
@@ -322,7 +340,12 @@ export const RepoUrlPicker = ({
         error={rawErrors?.length > 0 && !repo}
       >
         <InputLabel htmlFor="repoInput">Repository</InputLabel>
-        <Input id="repoInput" onChange={updateRepo} value={repo} />
+        <Input
+          id="repoInput"
+          onChange={updateRepo}
+          value={repo}
+          onBlur={onBlur}
+        />
         <FormHelperText>The name of the repository</FormHelperText>
       </FormControl>
     </>
