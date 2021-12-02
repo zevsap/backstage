@@ -1,0 +1,10 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.22.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'snyk:lic:npm:axe-core:MPL-2.0':
+    - '*':
+        reason: Backstage itself does not redistribute this dependency in minified form
+        expires: 2031-09-06T17:18:55.027Z
+        created: 2021-09-06T17:18:55.027Z
+patch: {}
