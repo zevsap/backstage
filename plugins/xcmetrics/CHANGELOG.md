@@ -1,5 +1,13 @@
 # @backstage/plugin-xcmetrics
 
+## 0.2.12
+
+### Patch Changes
+
+- 343ef34599: Handle a case where XCode data from backend (before 0.0.8) could be missing
+- Updated dependencies
+  - @backstage/core-components@0.7.7
+
 ## 0.2.11
 
 ### Patch Changes

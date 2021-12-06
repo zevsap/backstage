@@ -1,5 +1,16 @@
 # @backstage/cli
 
+## 0.10.1
+
+### Patch Changes
+
+- 0ebb05eee2: Add cli option to minify the generated code of a plugin or backend package
+
+  ```
+  backstage-cli plugin:build --minify
+  backstage-cli backend:build --minify
+  ```
+
 ## 0.10.0
 
 ### Minor Changes

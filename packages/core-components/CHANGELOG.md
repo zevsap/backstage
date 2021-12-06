@@ -1,5 +1,11 @@
 # @backstage/core-components
 
+## 0.7.7
+
+### Patch Changes
+
+- 9603827bb5: Addressed some peer dependency warnings
+
 ## 0.7.6
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @backstage/create-app
 
+## 0.4.7
+
+### Patch Changes
+
+- 9603827bb5: Addressed some peer dependency warnings
+
 ## 0.4.6
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @backstage/backend-common
 
+## 0.9.13
+
+### Patch Changes
+
+- 6298de32dd: Add knexConfig config section
+
 ## 0.9.12
 
 ### Patch Changes

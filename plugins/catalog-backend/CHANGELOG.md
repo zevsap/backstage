@@ -1,5 +1,13 @@
 # @backstage/plugin-catalog-backend
 
+## 0.19.1
+
+### Patch Changes
+
+- 0e4daaa753: Reject catalog entities that have duplicate fields that vary only in casing.
+- Updated dependencies
+  - @backstage/backend-common@0.9.13
+
 ## 0.19.0
 
 ### Minor Changes
